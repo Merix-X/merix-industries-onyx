@@ -1,42 +1,70 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Onyx AI Console</title>
-    <script defer src="https://pyscript.net/latest/pyscript.js"></script>
-</head>
-<body>
-    <h1>Onyx AI Console</h1>
-    
-    <textarea id="console-output" rows="10" cols="50" readonly></textarea>
-    <br>
-    <input type="text" id="user-input" placeholder="Type your message...">
-    <button id="send-button">Send</button>
+    <head>
+        <!-- Recommended meta tags -->
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <py-script>
-        import js
-        import asyncio
-        import json
-        from pyodide.http import pyfetch
+        <!-- PyScript CSS -->
+        <link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css">
 
-        async def send_query():
-            user_input = js.document.getElementById("user-input").value
-            if not user_input:
-                return
+        <!-- This script tag bootstraps PyScript -->
+        <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
 
-            url = "https://3d0a5f19-94d1-40ec-aab7-b49270c51f9c-00-1gpbht1g7g7d7.spock.replit.dev/ask"  # ZMĚŇTE na skutečný server
-            headers = {"Content-Type": "application/json"}
-            data = json.dumps({"query": user_input})
+        <title>AI Assistant</title>
+        <link rel="icon" type="image/png" href="./assets/favicon.png" />
+    </head>
+    <body>
+        <dialog id="loading">
+            <h1>Loading...</h1>
+        </dialog>
 
-            response = await pyfetch(url, method="POST", headers=headers, body=data)
-            result = await response.json()
-            
-            output_area = js.document.getElementById("console-output")
-            output_area.value += f"\nYou: {user_input}\nAI: {result['response']}\n"
-            js.document.getElementById("user-input").value = ""
+        <nav class="navbar" style="background-color: #000000">
+            <div class="app-header">
+                <a href="/">
+                    <img src="./assets/logo.png" class="logo" />
+                </a>
+                <a class="title" href="" style="color: #f0ab3c">AI Assistant</a>
+            </div>
+        </nav>
 
-        js.document.getElementById("send-button").addEventListener("click", lambda event: asyncio.ensure_future(send_query()))
-    </py-script>
-</body>
+        <!-- User Input for AI query -->
+        <section>
+            <h2>Ask your question:</h2>
+            <input id="user-input" type="text" placeholder="Ask something...">
+            <button onclick="runAI()">Ask AI</button>
+        </section>
+
+        <section class="pyscript">
+            <h2>AI Response:</h2>
+            <textarea id="console-output" rows="10" cols="50" readonly></textarea>
+        </section>
+
+        <script type="module">
+            function runAI() {
+                // Retrieve user input from the text box
+                const user_input = document.getElementById("user-input").value;
+
+                // Use PyScript to execute the Python code for AI response
+                pyodide.runPythonAsync(`
+                    from datetime import datetime
+                    import random
+                    
+                    # Simulate AI response
+                    responses = ["I'm doing great!", "I'm here to help.", "How can I assist you today?"]
+                    user_query = "${user_input}"
+                    answer = random.choice(responses)
+                    now = datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
+                    answer_message = f"User asked: {user_query}\\nAI says: {answer}\\nTime: {now}"
+
+                    display(answer_message)
+                `).then(result => {
+                    // Display the result in the textarea
+                    document.getElementById("console-output").value = result;
+                }).catch(error => {
+                    console.error('Error:', error);
+                });
+            }
+        </script>
+    </body>
 </html>
