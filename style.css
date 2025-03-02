@@ -1,90 +1,74 @@
+/* Global styles */
 body {
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: Arial, sans-serif;
+    background-color: #1e1e1e;
+    color: #ffffff;
+    text-align: center;
     margin: 0;
     padding: 20px;
-    background-color: #f7f9fc;
-    color: #333;
-    line-height: 1.6;
 }
 
-/* Center the layout with max-width for readability */
-body {
-    max-width: 800px;
-    margin: auto;
-}
-
-/* Styling for the headings */
+/* Heading styles */
 h2 {
-    color: #2c3e50;
-    border-bottom: 2px solid #00aaff;
-    padding-bottom: 5px;
+    font-size: 28px;
+    color: #ff9900;
+    margin-top: 30px;
 }
 
-/* Input field styling */
-#user-input {
-    width: calc(100% - 32px);
+/* Input and button styles */
+input[type="text"] {
+    font-size: 18px;
     padding: 10px;
-    border: 2px solid #ddd;
+    width: 60%;
+    max-width: 500px;
+    border: 1px solid #ff9900;
+    background-color: #333;
+    color: #fff;
     border-radius: 5px;
-    font-size: 16px;
-    margin-bottom: 10px;
-    box-sizing: border-box;
-    transition: border-color 0.3s;
+    margin-top: 20px;
 }
 
-#user-input:focus {
-    border-color: #00aaff;
+input[type="text"]:focus {
     outline: none;
+    border-color: #ffcc00;
 }
 
-/* Button styling */
-#send-button {
-    background-color: #00aaff;
-    color: white;
-    border: none;
+button {
+    font-size: 18px;
     padding: 10px 20px;
-    font-size: 16px;
+    background-color: #ff9900;
+    color: #fff;
+    border: none;
     border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s;
-    display: block;
     margin-top: 10px;
 }
 
-#send-button:hover {
-    background-color: #007acc;
+button:hover {
+    background-color: #ffcc00;
 }
 
-/* Textarea styling */
-#console-output {
-    width: calc(100% - 32px);
+/* Output area (AI response) */
+textarea {
+    font-size: 16px;
+    width: 80%;
+    max-width: 600px;
     padding: 10px;
     margin-top: 20px;
-    border: 2px solid #ddd;
+    border: 1px solid #ff9900;
+    background-color: #333;
+    color: #fff;
     border-radius: 5px;
-    font-size: 14px;
-    background-color: #f9f9f9;
-    resize: none;
-    box-sizing: border-box;
+    resize: vertical;
 }
 
-/* Add focus highlight to textarea */
-#console-output:focus {
-    border-color: #00aaff;
-}
-
-/* Add responsive design */
-@media (max-width: 600px) {
-    body {
-        padding: 10px;
-        font-size: 14px;
-    }
-    
-    #user-input, #console-output {
-        width: 100%;
+/* Responsive design */
+@media (max-width: 768px) {
+    input[type="text"] {
+        width: 80%;
     }
 
-    #send-button {
-        width: 100%;
+    textarea {
+        width: 90%;
     }
 }
