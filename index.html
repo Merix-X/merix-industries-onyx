@@ -3,49 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script> <!-- Axios for API requests -->
     <title>AI Assistant</title>
 </head>
 <body>
-    <!-- User Input for AI query -->
-    <section>
-        <h2>Ask your question:</h2>
-        <input id="user-input" type="text" placeholder="Ask something...">
-        <button id="send-button">Ask AI</button>
-    </section>
+    <h2>Ask your question:</h2>
+    <input id="user-input" type="text" placeholder="Ask something...">
+    <button id="send-button">Send</button>
 
-    <section class="pyscript">
-        <h2>AI Response:</h2>
-        <textarea id="console-output" rows="10" cols="50" readonly></textarea>
+    <h2>AI Response:</h2>
+    <textarea id="console-output" rows="10" cols="50" readonly></textarea>
 
-        <script type="py">
-            import js
-            import asyncio
-            import json
-            from pyodide.http import pyfetch
+    <script>
+        // Function to send user input to backend and receive AI response
+        async function sendQuery() {
+            const userInput = document.getElementById("user-input").value;
+            if (!userInput) return;
 
-            # Function to send user input to server and get response
-            async def send_query():
-                user_input = js.document.getElementById("user-input").value
-                if not user_input:
-                    return
-                
-                url = "https://3d0a5f19-94d1-40ec-aab7-b49270c51f9c-00-1gpbht1g7g7d7.spock.replit.dev/ask"  # Replace with your Replit server URL
-                headers = {"Content-Type": "application/json"}
-                data = json.dumps({"query": user_input})
+            try {
+                // Send user input to the backend
+                const response = await axios.post('https://3d0a5f19-94d1-40ec-aab7-b49270c51f9c-00-1gpbht1g7g7d7.spock.replit.dev/ask', {
+                    query: userInput
+                });
 
-                # Send request to Flask backend
-                response = await pyfetch(url, method="POST", headers=headers, body=data)
-                result = await response.json()
+                // Display the AI's response in the console
+                const outputArea = document.getElementById("console-output");
+                outputArea.value += `\nYou: ${userInput}\nAI: ${response.data.response}\n`;
 
-                # Display the AI response in the console
-                output_area = js.document.getElementById("console-output")
-                output_area.value += f"\nYou: {user_input}\nAI: {result['response']}\n"
-                js.document.getElementById("user-input").value = ""
+                // Clear the input field
+                document.getElementById("user-input").value = '';
+            } catch (error) {
+                console.error('Error communicating with backend:', error);
+            }
+        }
 
-            # Attach event listener to button
-            js.document.getElementById("send-button").addEventListener("click", lambda event: asyncio.ensure_future(send_query()))
-        </script>
-    </section>
+        // Attach event listener to the button
+        document.getElementById("send-button").addEventListener("click", sendQuery);
+    </script>
 </body>
 </html>
