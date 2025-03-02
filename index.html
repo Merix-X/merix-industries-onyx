@@ -4,15 +4,10 @@
         <!-- Recommended meta tags -->
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-        <!-- PyScript CSS -->
-        <link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css">
-
         <!-- This script tag bootstraps PyScript -->
         <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
 
         <title>AI Assistant</title>
-        <link rel="icon" type="image/png" href="./assets/favicon.png" />
     </head>
     <body>
         <dialog id="loading">
@@ -32,7 +27,7 @@
         <section>
             <h2>Ask your question:</h2>
             <input id="user-input" type="text" placeholder="Ask something...">
-            <button onclick="runAI()">Ask AI</button>
+            <button onclick="run()">Ask AI</button>
         </section>
 
         <section class="pyscript">
@@ -40,34 +35,11 @@
             <textarea id="console-output" rows="10" cols="50" readonly></textarea>
         </section>
 
-        <script type="module">
-            async function runAI() {
-                // Retrieve user input from the text box
-                const user_input = document.getElementById("user-input").value;
-
-                try {
-                    // Use PyScript to execute the Python code for AI response
-                    const result = await pyodide.runPythonAsync(`
-                        from datetime import datetime
-                        import random
-                        
-                        # Simulate AI response
-                        responses = ["I'm doing great!", "I'm here to help.", "How can I assist you today?"]
-                        user_query = "${user_input}"
-                        answer = random.choice(responses)
-                        now = datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
-                        answer_message = f"User asked: {user_query}\\nAI says: {answer}\\nTime: {now}"
-                        answer_message
-                    `);
-                    
-                    // Display the result in the textarea
-                    document.getElementById("console-output").value = result;
-
-                } catch (error) {
-                    console.error('Error running Python code:', error);
-                    document.getElementById("console-output").value = 'Error executing AI request.';
-                }
-            }
-        </script>
+        <section class="pyscript">
+            <script type="py">
+                def run():
+                    print("hello world")
+            </script>
+        </section>
     </body>
 </html>
