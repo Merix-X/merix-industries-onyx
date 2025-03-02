@@ -41,29 +41,32 @@
         </section>
 
         <script type="module">
-            function runAI() {
+            async function runAI() {
                 // Retrieve user input from the text box
                 const user_input = document.getElementById("user-input").value;
 
-                // Use PyScript to execute the Python code for AI response
-                pyodide.runPythonAsync(`
-                    from datetime import datetime
-                    import random
+                try {
+                    // Use PyScript to execute the Python code for AI response
+                    const result = await pyodide.runPythonAsync(`
+                        from datetime import datetime
+                        import random
+                        
+                        # Simulate AI response
+                        responses = ["I'm doing great!", "I'm here to help.", "How can I assist you today?"]
+                        user_query = "${user_input}"
+                        answer = random.choice(responses)
+                        now = datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
+                        answer_message = f"User asked: {user_query}\\nAI says: {answer}\\nTime: {now}"
+                        answer_message
+                    `);
                     
-                    # Simulate AI response
-                    responses = ["I'm doing great!", "I'm here to help.", "How can I assist you today?"]
-                    user_query = "${user_input}"
-                    answer = random.choice(responses)
-                    now = datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
-                    answer_message = f"User asked: {user_query}\\nAI says: {answer}\\nTime: {now}"
-
-                    display(answer_message)
-                `).then(result => {
                     // Display the result in the textarea
                     document.getElementById("console-output").value = result;
-                }).catch(error => {
-                    console.error('Error:', error);
-                });
+
+                } catch (error) {
+                    console.error('Error running Python code:', error);
+                    document.getElementById("console-output").value = 'Error executing AI request.';
+                }
             }
         </script>
     </body>
