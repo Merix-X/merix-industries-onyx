@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Merix Industries - AI Assistant</title>
+    <style>
+        /* Styly pro konzoli */
+        #console-output {
+            background-color: black;
+            color: green;
+            font-family: monospace;
+            padding: 10px;
+            width: 100%;
+            height: 300px;
+            overflow-y: scroll;
+            white-space: pre-wrap;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+
+        #user-input {
+            margin-top: 10px;
+            width: 80%;
+            padding: 5px;
+        }
+
+        button {
+            padding: 5px 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>AI Assistant</h1>
+    
+    <div class="container">
+        <h2>Talk to the AI Assistant:</h2>
+        <input type="text" id="user-input" placeholder="Ask a question..." />
+        <button onclick="askQuestion()">Ask</button>
+    </div>
+
+    <!-- Konzola pro zobrazování výstupů -->
+    <div id="console-output"></div>
+
+    <script>
+        function consoleLog(message) {
+            var consoleDiv = document.getElementById('console-output');
+            consoleDiv.innerHTML += message + '\n';
+            consoleDiv.scrollTop = consoleDiv.scrollHeight; // Posune obsah na konec
+        }
+
+        async function askQuestion() {
+            const userQuery = document.getElementById("user-input").value;
+            if (!userQuery) return;
+
+            // Logování dotazu uživatele do konzoly
+            consoleLog("You: " + userQuery);
+            
+            // Odeslání dotazu na backend
+            const response = await fetch('http://localhost:5000/ask', { // Pokud je server na Heroku, změňte URL na tu správnou
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ query: userQuery })
+            });
+
+            const data = await response.json();
+
+            if (data.response) {
+                // Logování odpovědi AI do konzoly
+                consoleLog("AI: " + data.response);
+            } else {
+                consoleLog("Error: " + data.error);
+            }
+        }
+    </script>
+</body>
+</html>
