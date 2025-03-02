@@ -10,24 +10,11 @@
         <title>AI Assistant</title>
     </head>
     <body>
-        <dialog id="loading">
-            <h1>Loading...</h1>
-        </dialog>
-
-        <nav class="navbar" style="background-color: #000000">
-            <div class="app-header">
-                <a href="/">
-                    <img src="./assets/logo.png" class="logo" />
-                </a>
-                <a class="title" href="" style="color: #f0ab3c">AI Assistant</a>
-            </div>
-        </nav>
-
         <!-- User Input for AI query -->
         <section>
             <h2>Ask your question:</h2>
             <input id="user-input" type="text" placeholder="Ask something...">
-            <button onclick="run()">Ask AI</button>
+            <button onclick="send_query()">Ask AI</button>
         </section>
 
         <section class="pyscript">
