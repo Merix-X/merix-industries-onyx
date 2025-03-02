@@ -18,29 +18,29 @@
     <button id="send-button">Send</button>
 
     <py-script>
-import js
-import asyncio
-import json
-from pyodide.http import pyfetch
-
-async def send_query():
-    user_input = js.document.getElementById("user-input").value
-    if not user_input:
-        return
-
-    url = "https://3d0a5f19-94d1-40ec-aab7-b49270c51f9c-00-1gpbht1g7g7d7.spock.replit.dev/"  # ZMĚŇTE na skutečný server
-    headers = {"Content-Type": "application/json"}
-    data = json.dumps({"query": user_input})
-
-    response = await pyfetch(url, method="POST", headers=headers, body=data)
-    result = await response.json()
-    
-    output_area = js.document.getElementById("console-output")
-    output_area.value += f"\nYou: {user_input}\nAI: {result['response']}\n"
-    js.document.getElementById("user-input").value = ""
-
-# Napojení tlačítka na funkci
-js.document.getElementById("send-button").addEventListener("click", lambda event: asyncio.ensure_future(send_query()))
+        import js
+        import asyncio
+        import json
+        from pyodide.http import pyfetch
+        
+        async def send_query():
+            user_input = js.document.getElementById("user-input").value
+            if not user_input:
+                return
+        
+            url = "https://3d0a5f19-94d1-40ec-aab7-b49270c51f9c-00-1gpbht1g7g7d7.spock.replit.dev/ask"  # ZMĚŇTE na skutečný server
+            headers = {"Content-Type": "application/json"}
+            data = json.dumps({"query": user_input})
+        
+            response = await pyfetch(url, method="POST", headers=headers, body=data)
+            result = await response.json()
+            
+            output_area = js.document.getElementById("console-output")
+            output_area.value += f"\nYou: {user_input}\nAI: {result['response']}\n"
+            js.document.getElementById("user-input").value = ""
+        
+        # Napojení tlačítka na funkci
+        js.document.getElementById("send-button").addEventListener("click", lambda event: asyncio.ensure_future(send_query()))
     </py-script>
 
 </body>
