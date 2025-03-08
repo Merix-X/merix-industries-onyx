@@ -5,14 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script> <!-- Axios for API requests -->
     <link rel="stylesheet" href="style.css">
-    <title>AI Assistant</title>
+    <title>AI Assistant ONYX</title>
 </head>
 <body>
-    <h2>Ask your question:</h2>
+    <h2>Ask Onyx:</h2>
     <input id="user-input" type="text" placeholder="Ask something...">
     <button id="send-button">Send</button>
 
-    <h2>AI Response:</h2>
+    <p id="status-message"></p>
+
+    <h2>Onyx's response:</h2>
     <textarea id="console-output" rows="10" cols="50" readonly></textarea>
 
     <script>
@@ -20,24 +22,27 @@
         async function sendQuery() {
             const userInput = document.getElementById("user-input").value;
             if (!userInput) return;
-
+        
             try {
-                // Send user input to the backend
+                // Změna textu na "Dotaz zaslán"
+                document.getElementById("status-message").textContent = "Dotaz zaslán";
+        
+                // Odeslání dotazu na backend
                 const response = await axios.post('https://3d0a5f19-94d1-40ec-aab7-b49270c51f9c-00-1gpbht1g7g7d7.spock.replit.dev/ask', {
                     query: userInput
                 });
-
-                // Display the AI's response in the console
+        
+                // Zobrazení odpovědi AI
                 const outputArea = document.getElementById("console-output");
                 outputArea.value += `\nYou: ${userInput}\nAI: ${response.data.response}\n`;
-
-                // Clear the input field
+        
+                // Vymazání vstupního pole
                 document.getElementById("user-input").value = '';
+        
             } catch (error) {
                 console.error('Error communicating with backend:', error);
             }
         }
-
         // Attach event listener to the button
         document.getElementById("send-button").addEventListener("click", sendQuery);
     </script>
