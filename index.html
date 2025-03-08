@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script> <!-- Axios for API requests -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <link rel="stylesheet" href="style.css">
     <title>AI Assistant Onyx</title>
 </head>
@@ -12,40 +12,66 @@
     <input id="user-input" type="text" placeholder="Ask something...">
     <button id="send-button">Send</button>
     <button id="voice-button"></button>
-    <p id="recognized-text"></p> <!-- Zde se zobrazí rozpoznaný text -->
-    
+    <p id="recognized-text"></p>
+
     <h2>Onyx's Response:</h2>
     <textarea id="console-output" rows="10" cols="50" readonly></textarea>
-    
+
     <script>
+        async function sendQuery() {
+            const userInput = document.getElementById("user-input").value;
+            if (!userInput) return;
+
+            try {
+                const response = await axios.post('https://YOUR_BACKEND_URL/ask', {
+                    query: userInput
+                });
+
+                const outputArea = document.getElementById("console-output");
+                outputArea.value += `\nYou: ${userInput}\nOnyx: ${response.data.response}\n`;
+
+                // AI odpověď hlasem
+                speak(response.data.response);
+
+                document.getElementById("user-input").value = '';
+            } catch (error) {
+                console.error('Error communicating with backend:', error);
+            }
+        }
+
         // Hlasové rozpoznávání
         const voiceButton = document.getElementById("voice-button");
         const userInput = document.getElementById("user-input");
         const recognizedText = document.getElementById("recognized-text");
-    
-        // Kontrola, zda prohlížeč podporuje rozpoznávání hlasu
+
         if ('webkitSpeechRecognition' in window) {
             const recognition = new webkitSpeechRecognition();
             recognition.continuous = false;
             recognition.interimResults = false;
-            recognition.lang = "en-US"; // Můžeš změnit na jiný jazyk, třeba "cs-CZ" pro češtinu
-    
-            // Co se stane, když je detekována řeč?
+            recognition.lang = "cs-CZ"; // Čeština jako výchozí jazyk
+
             recognition.onresult = function(event) {
                 const transcript = event.results[0][0].transcript;
-                userInput.value = transcript; // Nastaví text do inputu
-                recognizedText.textContent = "You said: " + transcript; // Zobrazí rozpoznaný text
+                userInput.value = transcript;
+                recognizedText.textContent = "Řekl(a) jste: " + transcript;
             };
-    
-            // Po kliknutí na tlačítko začne poslouchat
+
             voiceButton.addEventListener("click", () => {
-                recognizedText.textContent = "Listening...";
+                recognizedText.textContent = "Poslouchám...";
                 recognition.start();
             });
         } else {
             voiceButton.disabled = true;
-            recognizedText.textContent = "Speech recognition not supported in this browser.";
+            recognizedText.textContent = "Váš prohlížeč nepodporuje rozpoznávání hlasu.";
         }
+
+        function speak(text) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'cs-CZ'; // Čeština jako výchozí jazyk
+            speechSynthesis.speak(utterance);
+        }
+
+        document.getElementById("send-button").addEventListener("click", sendQuery);
     </script>
 </body>
 </html>
