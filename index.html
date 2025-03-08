@@ -61,7 +61,8 @@
                 console.error('Error communicating with backend:', error);
             }
         }
-        // Attach event listener to the button
+        
+        document.getElementById("voice-button").addEventListener("click", startListening);
         document.getElementById("send-button").addEventListener("click", sendQuery);
     </script>
 </body>
