@@ -82,6 +82,12 @@
                 document.getElementById("recognized-text").textContent = "Listening...";
                 recognition.start();
             });
+            
+            // Když rozpoznávání skončí
+            recognition.onend = function() {
+                document.getElementById("recognized-text").textContent = ""; // Smaže text "Listening..."
+            };
+
         } else {
             document.getElementById("voice-button").disabled = true;
             document.getElementById("recognized-text").textContent = "Speech recognition not supported.";
