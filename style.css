@@ -15,7 +15,16 @@ h2 {
     margin-top: 30px;
 }
 
-/* Input and button styles */
+/* Input container for alignment */
+.input-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px; /* Space between buttons and input */
+    margin-top: 20px;
+}
+
+/* Input styles */
 input[type="text"] {
     font-size: 18px;
     padding: 10px;
@@ -25,7 +34,6 @@ input[type="text"] {
     background-color: #333;
     color: #fff;
     border-radius: 5px;
-    margin-top: 20px;
 }
 
 input[type="text"]:focus {
@@ -33,6 +41,7 @@ input[type="text"]:focus {
     border-color: #ffcc00;
 }
 
+/* Button styles */
 button {
     font-size: 18px;
     padding: 10px 20px;
@@ -41,11 +50,36 @@ button {
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    margin-top: 10px;
 }
 
 button:hover {
     background-color: #ffcc00;
+}
+
+/* Voice button specific styles */
+#voice-button {
+    width: 60px;
+    height: 60px;
+    border: none;
+    background-color: #ff9900;
+    border-radius: 50%;
+    background-image: url('mic.png'); /* Replace with your actual image */
+    background-size: 60%;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+    box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.2);
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+#voice-button:hover {
+    background-color: #ffcc00;
+    transform: scale(1.1);
+}
+
+#voice-button:active {
+    background-color: #ff6600;
+    transform: scale(0.9);
 }
 
 /* Output area (AI response) */
@@ -71,30 +105,13 @@ textarea {
     textarea {
         width: 90%;
     }
-}
 
-#voice-button {
-    width: 60px;
-    height: 60px;
-    border: none;
-    background-color: #ff9900;
-    border-radius: 50%;
-    background-image: url('mic.png'); /* Nahraď URL podle umístění souboru */
-    background-size: 60%;
-    background-repeat: no-repeat;
-    background-position: center;
-    cursor: pointer;
-    box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.2);
-    transition: background-color 0.3s, transform 0.2s;
-}
+    .input-container {
+        flex-direction: column; /* Stack input and buttons vertically on mobile */
+        gap: 20px;
+    }
 
-#voice-button:hover {
-    background-color: #ffcc00;
-    transform: scale(1.1);
+    #voice-button {
+        margin-top: 10px;
+    }
 }
-
-#voice-button:active {
-    background-color: #ff6600;
-    transform: scale(0.9);
-}
-
