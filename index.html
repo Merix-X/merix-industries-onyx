@@ -4,14 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <link rel="stylesheet" href="style.css">
-    <title>AI Assistant Onyx</title>
+    <title>Onyx AI Assistant</title>
 </head>
 <body>
     <h2>Ask Onyx:</h2>
     <input id="user-input" type="text" placeholder="Ask something...">
     <button id="send-button">Send</button>
-    <button id="voice-button"></button>
+    <button id="voice-button">Voice</button>
     <p id="recognized-text"></p>
 
     <h2>Onyx's Response:</h2>
@@ -23,51 +22,42 @@
             if (!userInput) return;
 
             try {
-                const response = await axios.post('https://3d0a5f19-94d1-40ec-aab7-b49270c51f9c-00-1gpbht1g7g7d7.spock.replit.dev/ask', {
+                const response = await axios.post('https://your-backend-url.com/ask', { // Uprav URL podle backendu
                     query: userInput
                 });
 
                 const outputArea = document.getElementById("console-output");
                 outputArea.value += `\nYou: ${userInput}\nOnyx: ${response.data.response}\n`;
-
-                // AI odpověď hlasem
                 speak(response.data.response);
-
                 document.getElementById("user-input").value = '';
             } catch (error) {
                 console.error('Error communicating with backend:', error);
             }
         }
 
-        // Hlasové rozpoznávání
-        const voiceButton = document.getElementById("voice-button");
-        const userInput = document.getElementById("user-input");
-        const recognizedText = document.getElementById("recognized-text");
-
+        // Hlasový vstup
         if ('webkitSpeechRecognition' in window) {
             const recognition = new webkitSpeechRecognition();
-            recognition.continuous = false;
-            recognition.interimResults = false;
-            recognition.lang = "en-US"; // Čeština jako výchozí jazyk
+            recognition.lang = "en-US";
 
             recognition.onresult = function(event) {
                 const transcript = event.results[0][0].transcript;
-                userInput.value = transcript;
-                recognizedText.textContent = "You said: " + transcript;
+                document.getElementById("user-input").value = transcript;
+                document.getElementById("recognized-text").textContent = "You said: " + transcript;
             };
 
-            voiceButton.addEventListener("click", () => {
-                recognizedText.textContent = "Listening...";
+            document.getElementById("voice-button").addEventListener("click", () => {
+                document.getElementById("recognized-text").textContent = "Listening...";
                 recognition.start();
             });
         } else {
-            voiceButton.disabled = true;
-            recognizedText.textContent = "Your browser does not support voice recognition.";
+            document.getElementById("voice-button").disabled = true;
+            document.getElementById("recognized-text").textContent = "Speech recognition not supported.";
         }
 
         function speak(text) {
             const utterance = new SpeechSynthesisUtterance(text);
-            utterance.lang = 'en-US'; // Čeština jako výchozí jazyk
+            utterance.lang = 'en-US';
             speechSynthesis.speak(utterance);
         }
 
