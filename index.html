@@ -43,6 +43,7 @@
             const userInputValue = userInput.value;
             if (!userInputValue) return;
 
+            console.log("Sending query: ", userInputValue); // Debugging log
             // Zobrazit spinner
             document.getElementById("loading-spinner").style.display = "block";
 
@@ -64,12 +65,15 @@
             }
         }
 
+        // Ujistěte se, že připojujete event listener na správný element
         userInput.addEventListener("keypress", function(event) {
             if (event.key === "Enter") {
                 event.preventDefault();
                 sendQuery();
             }
         });
+
+        document.getElementById("send-button").addEventListener("click", sendQuery);
 
         // Hlasový vstup
         if ('webkitSpeechRecognition' in window) {
@@ -101,8 +105,6 @@
             utterance.lang = 'en-US';
             speechSynthesis.speak(utterance);
         }
-
-        document.getElementById("send-button").addEventListener("click", sendQuery);
     </script>
 </body>
 </html>
