@@ -29,7 +29,7 @@
     <h2>Ask Onyx:</h2>
     <input id="user-input" type="text" placeholder="Ask something...">
     <button id="send-button">Send</button>
-    <button id="voice-button"></button>
+    <button id="voice-button">Start Listening</button>
     <p id="recognized-text"></p>
 
     <h2>Onyx's Response:</h2>
@@ -37,24 +37,27 @@
     <textarea id="console-output" rows="10" cols="50" readonly></textarea>
 
     <script>
+        const userInput = document.getElementById("user-input");
+
         async function sendQuery() {
-            const userInput = document.getElementById("user-input").value;
-            if (!userInput) return;
+            const userInputValue = userInput.value;
+            if (!userInputValue) return;
 
             // Zobrazit spinner
             document.getElementById("loading-spinner").style.display = "block";
 
             try {
                 const response = await axios.post('https://web-production-2e5a.up.railway.app/ask', {
-                    query: userInput
+                    query: userInputValue
                 });
 
                 const outputArea = document.getElementById("console-output");
-                outputArea.value += `\nYou: ${userInput}\nOnyx: ${response.data.response}\n`;
+                outputArea.value += `\nYou: ${userInputValue}\nOnyx: ${response.data.response}\n`;
                 speak(response.data.response);
-                document.getElementById("user-input").value = '';
+                userInput.value = '';
             } catch (error) {
                 console.error('Error communicating with backend:', error);
+                document.getElementById("console-output").value += `\nError: ${error.message}\n`;
             } finally {
                 // Skrytí spinneru po dokončení požadavku
                 document.getElementById("loading-spinner").style.display = "none";
@@ -75,14 +78,14 @@
 
             recognition.onresult = function(event) {
                 const transcript = event.results[0][0].transcript;
-                document.getElementById("user-input").value = transcript;
+                userInput.value = transcript;
             };
 
             document.getElementById("voice-button").addEventListener("click", () => {
                 document.getElementById("recognized-text").textContent = "Listening...";
                 recognition.start();
             });
-            
+
             // Když rozpoznávání skončí
             recognition.onend = function() {
                 document.getElementById("recognized-text").textContent = ""; // Smaže text "Listening..."
