@@ -6,83 +6,52 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <link rel="stylesheet" href="style.css">
     <title>Onyx AI Assistant</title>
-    <style>
-        /* CSS pro animaci načítání */
-        .loading-spinner {
-            display: none;
-            width: 40px;
-            height: 40px;
-            border: 4px solid rgba(255, 255, 255, 0.3);
-            border-top: 4px solid #ffcc00;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 10px auto;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-    </style>
 </head>
 <body>
     <h2>Ask Onyx:</h2>
-    <input id="user-input" type="text" placeholder="Ask something...">
-    <button id="send-button">Send</button>
-    <button id="voice-button"></button>
+    <div class="input-container">
+        <input id="user-input" type="text" placeholder="Ask something...">
+        <button id="send-button">Send</button>
+        <button id="voice-button"></button>
+    </div>
     <p id="recognized-text"></p>
 
     <h2>Onyx's Response:</h2>
-    <div id="loading-spinner" class="loading-spinner"></div> <!-- Spinner -->
+    <div id="loading-spinner" class="loading-spinner"></div>
     <textarea id="console-output" rows="10" cols="50" readonly></textarea>
 
     <script>
-        const userInput = document.getElementById("user-input");
-
         async function sendQuery() {
-            const userInputValue = userInput.value;
-            if (!userInputValue) return;
+            const userInput = document.getElementById("user-input").value;
+            if (!userInput) return;
 
-            console.log("Sending query: ", userInputValue); // Debugging log
-            // Zobrazit spinner
             document.getElementById("loading-spinner").style.display = "block";
 
             try {
                 const response = await axios.post('https://web-production-2e5a.up.railway.app/ask', {
-                    query: userInputValue
+                    query: userInput
                 });
 
                 const outputArea = document.getElementById("console-output");
-                outputArea.value += `\nYou: ${userInputValue}\nOnyx: ${response.data.response}\n`;
+                outputArea.value += `\nYou: ${userInput}\nOnyx: ${response.data.response}\n`;
                 speak(response.data.response);
-                userInput.value = '';
+                document.getElementById("user-input").value = '';
             } catch (error) {
                 console.error('Error communicating with backend:', error);
-                document.getElementById("console-output").value += `\nError: ${error.message}\n`;
             } finally {
-                // Skrytí spinneru po dokončení požadavku
                 document.getElementById("loading-spinner").style.display = "none";
             }
         }
 
-        // Ujistěte se, že připojujete event listener na správný element
-        userInput.addEventListener("keypress", function(event) {
-            if (event.key === "Enter") {
-                event.preventDefault();
-                sendQuery();
-            }
-        });
-
         document.getElementById("send-button").addEventListener("click", sendQuery);
 
-        // Hlasový vstup
         if ('webkitSpeechRecognition' in window) {
             const recognition = new webkitSpeechRecognition();
             recognition.lang = "en-US";
 
             recognition.onresult = function(event) {
                 const transcript = event.results[0][0].transcript;
-                userInput.value = transcript;
+                document.getElementById("user-input").value = transcript;
             };
 
             document.getElementById("voice-button").addEventListener("click", () => {
@@ -90,11 +59,9 @@
                 recognition.start();
             });
 
-            // Když rozpoznávání skončí
             recognition.onend = function() {
-                document.getElementById("recognized-text").textContent = ""; // Smaže text "Listening..."
+                document.getElementById("recognized-text").textContent = "";
             };
-
         } else {
             document.getElementById("voice-button").disabled = true;
             document.getElementById("recognized-text").textContent = "Speech recognition not supported.";
