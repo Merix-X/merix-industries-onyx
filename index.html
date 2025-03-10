@@ -6,6 +6,24 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <link rel="stylesheet" href="style.css">
     <title>Onyx AI Assistant</title>
+    <style>
+        /* CSS pro animaci načítání */
+        .loading-spinner {
+            display: none;
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid #ffcc00;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 10px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
 </head>
 <body>
     <h2>Ask Onyx:</h2>
@@ -15,12 +33,16 @@
     <p id="recognized-text"></p>
 
     <h2>Onyx's Response:</h2>
+    <div id="loading-spinner" class="loading-spinner"></div> <!-- Spinner -->
     <textarea id="console-output" rows="10" cols="50" readonly></textarea>
 
     <script>
         async function sendQuery() {
             const userInput = document.getElementById("user-input").value;
             if (!userInput) return;
+
+            // Zobrazit spinner
+            document.getElementById("loading-spinner").style.display = "block";
 
             try {
                 const response = await axios.post('https://web-production-2e5a.up.railway.app/ask', {
@@ -33,6 +55,9 @@
                 document.getElementById("user-input").value = '';
             } catch (error) {
                 console.error('Error communicating with backend:', error);
+            } finally {
+                // Skrytí spinneru po dokončení požadavku
+                document.getElementById("loading-spinner").style.display = "none";
             }
         }
 
