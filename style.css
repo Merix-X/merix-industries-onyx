@@ -20,7 +20,7 @@ nav {
   left: 0;
   z-index: 1000;
   border-bottom: 2px solid #ffcc00;
-  height: 65px; /* výška menu – pomůže při výpočtu padding-top pro body */
+  height: 50px; /* výška menu – pomůže při výpočtu padding-top pro body */
 }
 /* Logo */
 .logo-text-wrapper {
