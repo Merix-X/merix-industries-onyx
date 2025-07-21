@@ -22,6 +22,36 @@ nav {
   border-bottom: 2px solid #ffcc00;
   height: 65px; /* výška menu – pomůže při výpočtu padding-top pro body */
 }
+/* Logo */
+.logo-text-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo-text-wrapper img {
+    max-width: 48px;
+    height: 48px;
+    border-radius: 50%;
+}
+
+.logo-text-wrapper span {
+    color: #ffffff;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/* Menu */
+.menu {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+    margin: 0;
+    padding: 0;
+    gap: 30px;
+}
 
 /* Heading styles */
 h2 {
