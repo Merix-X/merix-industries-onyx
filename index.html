@@ -26,140 +26,6 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <link rel="stylesheet" href="style.css">
     <title>Onyx AI Assistant</title>
-    <style>
-        /* Global styles */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #1e1e1e;
-            color: #ffffff;
-            text-align: center;
-            margin: 0;
-            padding: 20px;
-        }
-
-        /* Heading styles */
-        h2 {
-            font-size: 28px;
-            color: #ff9900;
-            margin-top: 30px;
-        }
-
-        /* Input container for alignment */
-        .input-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px; /* Space between buttons and input */
-            margin-top: 20px;
-        }
-
-        /* Input styles */
-        input[type="text"] {
-            font-size: 18px;
-            padding: 10px;
-            width: 60%;
-            max-width: 500px;
-            border: 1px solid #ff9900;
-            background-color: #333;
-            color: #fff;
-            border-radius: 5px;
-            height: 40px;
-        }
-
-        input[type="text"]:focus {
-            outline: none;
-            border-color: #ffcc00;
-        }
-
-        /* Button styles */
-        button {
-            font-size: 18px;
-            padding: 10px 20px;
-            background-color: #ff9900;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        button:hover {
-            background-color: #ffcc00;
-        }
-
-        /* Voice button specific styles */
-        #voice-button {
-            width: 60px;
-            height: 60px;
-            border: none;
-            background-color: #ff9900;
-            border-radius: 50%;
-            background-image: url('mic.png'); /* Replace with your actual image */
-            background-size: 60%;
-            background-repeat: no-repeat;
-            background-position: center;
-            cursor: pointer;
-            box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.2);
-            transition: background-color 0.3s, transform 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        #voice-button:hover {
-            background-color: #ffcc00;
-            transform: scale(1.1);
-        }
-
-        #voice-button:active {
-            background-color: #ff6600;
-            transform: scale(0.9);
-        }
-
-        /* Output area (AI response) */
-        textarea {
-            font-size: 16px;
-            width: 80%;
-            max-width: 600px;
-            padding: 10px;
-            margin-top: 20px;
-            border: 1px solid #ff9900;
-            background-color: #333;
-            color: #fff;
-            border-radius: 5px;
-            resize: vertical;
-        }
-
-        /* Responsive design */
-        @media (max-width: 768px) {
-            input[type="text"] {
-                width: 80%;
-                height: 50%
-            }
-
-            textarea {
-                width: 90%;
-            }
-
-            .input-container {
-                flex-direction: row; /* Keep buttons horizontally aligned on mobile */
-                gap: 10px;
-                justify-content: center; /* Ensure center alignment */
-            }
-
-            #voice-button {
-                height: 50px; /* Adjust height */
-                width: 50px;  /* Adjust width */
-            }
-
-            button {
-                height: 40px; /* Ensure buttons are same height */
-            }
-        }
-    </style>
 </head>
 <body>
     <h2>Ask Onyx:</h2>
@@ -175,6 +41,13 @@
     <textarea id="console-output" rows="10" cols="50" readonly></textarea>
 
     <script>
+         document.addEventListener("DOMContentLoaded", function() {
+           const menuToggle = document.querySelector(".menu-toggle");
+           const menu = document.querySelector(".menu");
+           menuToggle.addEventListener("click", () => {
+             menu.classList.toggle("active");
+           });
+         });
         async function sendQuery() {
             const userInput = document.getElementById("user-input").value;
             if (!userInput) return;
