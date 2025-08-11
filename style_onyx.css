@@ -143,7 +143,7 @@ button:focus {
   height: 40px;
   padding: 0;
   font-weight: normal;
-  background: url('mic_icon.svg') center center no-repeat;
+  background: url('mic.png') center center no-repeat;
   background-size: 60% 60%;
   border-radius: 50%;
   box-shadow: 0 0 6px rgba(255, 204, 0, 0.7);
